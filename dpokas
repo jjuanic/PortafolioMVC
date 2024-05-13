@@ -1,0 +1,386 @@
+[33mcommit 73c1b32c0d7932e8042f28e1c5ee5792a438fed6[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Juan Ignacio Chiappella Zarini <juanignacioch4@gmail.com>
+Date:   Mon May 13 11:57:06 2024 -0300
+
+    subiendo a github
+
+[1mdiff --git a/Controllers/HomeController.cs b/Controllers/HomeController.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..563dd6e[m
+[1m--- /dev/null[m
+[1m+++ b/Controllers/HomeController.cs[m
+[36m@@ -0,0 +1,60 @@[m
+[32m+[m[32musing System.Diagnostics;[m
+[32m+[m[32musing Microsoft.AspNetCore.Mvc;[m
+[32m+[m[32musing Portafolio.Models;[m
+[32m+[m[32musing Portafolio.Servicios;[m
+[32m+[m
+[32m+[m[32mnamespace Portafolio.Controllers;[m
+[32m+[m
+[32m+[m[32mpublic class HomeController : Controller[m
+[32m+[m[32m{[m
+[32m+[m[32m    private readonly ILogger<HomeController> _logger;[m
+[32m+[m[32m    private readonly IRepositorioProyectos repositorioProyectos;[m
+[32m+[m
+[32m+[m[32m    public HomeController(ILogger<HomeController> logger, IRepositorioProyectos repositorioProyectos)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        _logger = logger;[m
+[32m+[m[32m        this.repositorioProyectos = repositorioProyectos;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public IActionResult Index()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var proyectos = repositorioProyectos.ObtenerProyectos().Take(3).ToList();[m
+[32m+[m[32m        var modelo = new HomeIndexViewModel(){Proyectos = proyectos};[m
+[32m+[m[32m        return View(modelo);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public IActionResult Privacy()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return View();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public IActionResult Proyectos()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        var proyectos = repositorioProyectos.ObtenerProyectos();[m
+[32m+[m[32m        return View(proyectos);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public IActionResult Contacto()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return View();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    [HttpPost] // Atributo, si no está, se sobreentiende que es un HttpGet[m
+[32m+[m
+[32m+[m[32m    public IActionResult Contacto(ContactoViewModel contactoViewModel)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return RedirectToAction("Gracias");[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    public IActionResult Gracias()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return View();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)][m
+[32m+[m[32m    public IActionResult Error()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Models/ContactoViewModel.cs b/Models/ContactoViewModel.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..77b3799[m
+[1m--- /dev/null[m
+[1m+++ b/Models/ContactoViewModel.cs[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32mnamespace Portafolio.Models[m
+[32m+[m[32m{[m
+[32m+[m
+[32m+[m[32mpublic class ContactoViewModel[m
+[32m+[m[32m{[m
+[32m+[m[32m    public string Nombre {get;set;}[m
+[32m+[m[32m    public string Email {get;set;}[m
+[32m+[m[32m    public string Mensaje {get;set;}[m
+[32m+[m[32m}[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Models/ErrorViewModel.cs b/Models/ErrorViewModel.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7f8c676[m
+[1m--- /dev/null[m
+[1m+++ b/Models/ErrorViewModel.cs[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32mnamespace Portafolio.Models;[m
+[32m+[m
+[32m+[m[32mpublic class ErrorViewModel[m
+[32m+[m[32m{[m
+[32m+[m[32m    public string? RequestId { get; set; }[m
+[32m+[m
+[32m+[m[32m    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);[m
+[32m+[m[32m}[m
+[1mdiff --git a/Models/HomeIndexViewModel.cs b/Models/HomeIndexViewModel.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..56801f6[m
+[1m--- /dev/null[m
+[1m+++ b/Models/HomeIndexViewModel.cs[m
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32mnamespace Portafolio.Models{[m
+[32m+[m
+[32m+[m[32m    public class HomeIndexViewModel{[m
+[32m+[m[32m        public IEnumerable<ProyectoDTO> Proyectos {get;set;}[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Models/Persona.cs b/Models/Persona.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5c4eff1[m
+[1m--- /dev/null[m
+[1m+++ b/Models/Persona.cs[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32mnamespace Portafolio.Models[m
+[32m+[m[32m{[m
+[32m+[m[32m    public class Persona[m[41m [m
+[32m+[m[32m    {[m
+[32m+[m[32m        public string Nombre {get; set;}[m
+[32m+[m[32m        public int Edad {get; set;}[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Models/ProyectoDTO.cs b/Models/ProyectoDTO.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6f1cbe7[m
+[1m--- /dev/null[m
+[1m+++ b/Models/ProyectoDTO.cs[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32mnamespace Portafolio.Models{[m
+[32m+[m
+[32m+[m[32m    public class ProyectoDTO {[m
+[32m+[m[32m        public string Titulo {get;set;}[m
+[32m+[m[32m        public string Descripcion {get;set;}[m
+[32m+[m[32m        public string ImagenURL {get;set;}[m
+[32m+[m[32m        public string Link {get;set;}[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Portafolio.csproj b/Portafolio.csproj[m
+[1mnew file mode 100644[m
+[1mindex 0000000..823a61f[m
+[1m--- /dev/null[m
+[1m+++ b/Portafolio.csproj[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32m<Project Sdk="Microsoft.NET.Sdk.Web">[m
+[32m+[m
+[32m+[m[32m  <PropertyGroup>[m
+[32m+[m[32m    <TargetFramework>net8.0</TargetFramework>[m
+[32m+[m[32m    <Nullable>disable</Nullable>[m
+[32m+[m[32m    <ImplicitUsings>enable</ImplicitUsings>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m
+[32m+[m[32m</Project>[m
+[1mdiff --git a/Portafolio.sln b/Portafolio.sln[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7ef1c60[m
+[1m--- /dev/null[m
+[1m+++ b/Portafolio.sln[m
+[36m@@ -0,0 +1,25 @@[m
+[32m+[m[32m﻿[m
+[32m+[m[32mMicrosoft Visual Studio Solution File, Format Version 12.00[m
+[32m+[m[32m# Visual Studio Version 17[m
+[32m+[m[32mVisualStudioVersion = 17.5.002.0[m
+[32m+[m[32mMinimumVisualStudioVersion = 10.0.40219.1[m
+[32m+[m[32mProject("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portafolio", "Portafolio.csproj", "{9DE899CD-F95C-4246-95D9-A824033F0F0B}"[m
+[32m+[m[32mEndProject[m
+[32m+[m[32mGlobal[m
+[32m+[m	[32mGlobalSection(SolutionConfigurationPlatforms) = preSolution[m
+[32m+[m		[32mDebug|Any CPU = Debug|Any CPU[m
+[32m+[m		[32mRelease|Any CPU = Release|Any CPU[m
+[32m+[m	[32mEndGlobalSection[m
+[32m+[m	[32mGlobalSection(ProjectConfigurationPlatforms) = postSolution[m
+[32m+[m		[32m{9DE899CD-F95C-4246-95D9-A824033F0F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[32m+[m		[32m{9DE899CD-F95C-4246-95D9-A824033F0F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[32m+[m		[32m{9DE899CD-F95C-4246-95D9-A824033F0F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU[m
+[32m+[m		[32m{9DE899CD-F95C-4246-95D9-A824033F0F0B}.Release|Any CPU.Build.0 = Release|Any CPU[m
+[32m+[m	[32mEndGlobalSection[m
+[32m+[m	[32mGlobalSection(SolutionProperties) = preSolution[m
+[32m+[m		[32mHideSolutionNode = FALSE[m
+[32m+[m	[32mEndGlobalSection[m
+[32m+[m	[32mGlobalSection(ExtensibilityGlobals) = postSolution[m
+[32m+[m		[32mSolutionGuid = {2FFFC7B7-A14A-4280-B04D-7EE4FF6F9199}[m
+[32m+[m	[32mEndGlobalSection[m
+[32m+[m[32mEndGlobal[m
+[1mdiff --git a/Program.cs b/Program.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..68ba674[m
+[1m--- /dev/null[m
+[1m+++ b/Program.cs[m
+[36m@@ -0,0 +1,31 @@[m
+[32m+[m[32musing Portafolio.Servicios;[m
+[32m+[m
+[32m+[m[32mvar builder = WebApplication.CreateBuilder(args);[m
+[32m+[m
+[32m+[m[32m// Add services to the container.[m
+[32m+[m[32mbuilder.Services.AddControllersWithViews();[m
+[32m+[m[32mbuilder.Services.AddTransient<IRepositorioProyectos, RepositorioProyectos>();[m
+[32m+[m
+[32m+[m
+[32m+[m[32mvar app = builder.Build();[m
+[32m+[m
+[32m+[m[32m// Configure the HTTP request pipeline.[m
+[32m+[m[32mif (!app.Environment.IsDevelopment())[m
+[32m+[m[32m{[m
+[32m+[m[32m    app.UseExceptionHandler("/Home/Error");[m
+[32m+[m[32m    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.[m
+[32m+[m[32m    app.UseHsts();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mapp.UseHttpsRedirection();[m
+[32m+[m[32mapp.UseStaticFiles();[m
+[32m+[m
+[32m+[m[32mapp.UseRouting();[m
+[32m+[m
+[32m+[m[32mapp.UseAuthorization();[m
+[32m+[m
+[32m+[m[32mapp.MapControllerRoute([m
+[32m+[m[32m    name: "default",[m
+[32m+[m[32m    pattern: "{controller=Home}/{action=Index}/{id?}");[m
+[32m+[m
+[32m+[m[32mapp.Run();[m
+[1mdiff --git a/Properties/launchSettings.json b/Properties/launchSettings.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0ba5cd1[m
+[1m--- /dev/null[m
+[1m+++ b/Properties/launchSettings.json[m
+[36m@@ -0,0 +1,38 @@[m
+[32m+[m[32m﻿{[m
+[32m+[m[32m  "$schema": "http://json.schemastore.org/launchsettings.json",[m
+[32m+[m[32m  "iisSettings": {[m
+[32m+[m[32m    "windowsAuthentication": false,[m
+[32m+[m[32m    "anonymousAuthentication": true,[m
+[32m+[m[32m    "iisExpress": {[m
+[32m+[m[32m      "applicationUrl": "http://localhost:62596",[m
+[32m+[m[32m      "sslPort": 44395[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "profiles": {[m
+[32m+[m[32m    "http": {[m
+[32m+[m[32m      "commandName": "Project",[m
+[32m+[m[32m      "dotnetRunMessages": true,[m
+[32m+[m[32m      "launchBrowser": true,[m
+[32m+[m[32m      "applicationUrl": "http://localhost:5122",[m
+[32m+[m[32m      "environmentVariables": {[m
+[32m+[m[32m        "ASPNETCORE_ENVIRONMENT": "Development"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "https": {[m
+[32m+[m[32m      "commandName": "Project",[m
+[32m+[m[32m      "dotnetRunMessages": true,[m
+[32m+[m[32m      "launchBrowser": true,[m
+[32m+[m[32m      "applicationUrl": "https://localhost:7268;http://localhost:5122",[m
+[32m+[m[32m      "environmentVariables": {[m
+[32m+[m[32m        "ASPNETCORE_ENVIRONMENT": "Development"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "IIS Express": {[m
+[32m+[m[32m      "commandName": "IISExpress",[m
+[32m+[m[32m      "launchBrowser": true,[m
+[32m+[m[32m      "environmentVariables": {[m
+[32m+[m[32m        "ASPNETCORE_ENVIRONMENT": "Development"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/Servicios/RepositorioProyectos.cs b/Servicios/RepositorioProyectos.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..aa6dc94[m
+[1m--- /dev/null[m
+[1m+++ b/Servicios/RepositorioProyectos.cs[m
+[36m@@ -0,0 +1,42 @@[m
+[32m+[m
+[32m+[m[32musing Portafolio.Models;[m
+[32m+[m
+[32m+[m[32mnamespace Portafolio.Servicios{[m
+[32m+[m
+[32m+[m[32m    public interface IRepositorioProyectos[m
+[32m+[m[32m    {[m
+[32m+[m[32m        List<ProyectoDTO> ObtenerProyectos();[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m    public class RepositorioProyectos: IRepositorioProyectos{[m
+[32m+[m[32m        public List<ProyectoDTO> ObtenerProyectos(){[m
+[32m+[m[32m        return new List<ProyectoDTO> {[m
+[32m+[m[32m            new ProyectoDTO{[m
+[32m+[m[32m            Titulo = "Cygnus",[m
+[32m+[m[32m            Descripcion = "Interprete para un lenguaje de programación cuyas reglas fueron definidas por nuestro grupo de trabajo",[m
+[32m+[m[32m            Link = "https://github.com/jjuanic/Cygnus",[m
+[32m+[m[32m            ImagenURL = "/images/Cygnus.png"[m
+[32m+[m[32m            },[m
+[32m+[m[32m            new ProyectoDTO{[m
+[32m+[m[32m            Titulo = "Tridify",[m
+[32m+[m[32m            Descripcion = "Proyecto Front-End que simula la compra de albúmes músicales consultados en la API de ITunes",[m
+[32m+[m[32m            Link = "https://tridify.netlify.app/",[m
+[32m+[m[32m            ImagenURL = "/images/M20.jpg"[m
+[32m+[m[32m            },[m
+[32m+[m[32m            new ProyectoDTO{[m
+[32m+[m[32m            Titulo = "HalcNews",[m
+[32m+[m[32m            Descripcion = "Proyecto Back-End en C# con Framework ABP que da soporte a una aplicación de noticias",[m
+[32m+[m[32m            Link = "https://github.com/HalcSF/HalcNews-BE",[m
+[32m+[m[32m            ImagenURL = "/images/Halc.jfif"[m
+[32m+[m[32m            },[m
+[32m+[m[32m            new ProyectoDTO{[m
+[32m+[m[32m            Titulo = "Portafolio Web",[m
+[32m+[m[32m            Descripcion = "Página Web realizada en ASP.NET MVC para un curso de Udemy 'Aprende ASP.NET Core MVC 6 Haciendo Proyectos Desde Cero'",[m
+[32m+[m[32m            Link = "https://www.udemy.com/course/aprende-aspnet-core-mvc-haciendo-proyectos-desde-cero/?kw=mvc+6+asp.net&src=sac",[m
+[32m+[m[32m            ImagenURL = "/images/portafolio.png"[m
+[32m+[m[32m            },[m
+[32m+[m[32m        };[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/Views/Home/Contacto.cshtml b/Views/Home/Contacto.cshtml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e7ebf90[m
+[1m--- /dev/null[m
+[1m+++ b/Views/Home/Contacto.cshtml[m
+[36m@@ -0,0 +1,21 @@[m
+[32m+[m[32m@{[m
+[32m+[m[32m    ViewData["Title"] = "Contacto";[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m<h1>Formulario de Contacto</h1>[m
+[32m+[m
+[32m+[m[32m<form asp-controller"Home" asp-action="Contacto">[m
+[32m+[m[32m    <div class="mb-3">[m
+[32m+[m[32m        <label for="nombre" class="form-label">Nombre</label>[m
+[32m+[m[32m        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Beto"/>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="mb-3">[m
+[32m+[m[32m        <label for="email" class="form-label">Email</label>[m
+[32m+[m[32m        <input type="email" class="form-control" id="email" name="email" placeholder="Beto@deldepro.ar"/>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="mb-3">[m
+[32m+[m[32m        <label for="mensaje" class="form-label">Mensaje</label>[m
+[32m+[m[32m        <textarea class="form-control" id="mensaje" name="mensaje" rows="3"></textarea>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <button type="submit" class="btn btn-primary">Enviar</button>[m
+[32m+[m[32m</form>[m
+\ No newline at end of file[m
+[1mdiff --git a/Views/Home/Gracias.cshtml b/Views/Home/Gracias.cshtml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..178cc87[m
+[1m--- /dev/null[m
+[1m+++ b/Views/Home/Gracias.cshtml[m
+[36m@@ -0,0 +1,7 @@[m
+[32m+[m[32m@{[m
+[32m+[m[32m    ViewData["Title"] = "Gracias";[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m<h1>Muchas gracias!!</h1>[m
+[32m+[m[32m<p>Te contestaré lo más pronto posible</p>[m
+[32m+[m[32m<div> <a asp-action="Index" asp-controller="Home">Volver al Home</a></div>[m
+\ No newline at end of file[m
+[1mdiff --git a/Views/Home/Index.cshtml b/Views/Home/Index.cshtml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..675f2d4[m
+[1m--- /dev/null[m
+[1m+++ b/Views/Home/Index.cshtml[m
+[36m@@ -0,0 +1,11 @@[m
+[32m+[m[32m﻿@model HomeIndexViewModel[m
+[32m+[m
+[32m+[m[32m@{[m
+[32m+[m[32m    ViewData["Title"] = "Home Page";[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m<partial name="_presentacion" />[m
+[32m+[m
+[32m+[m[32m<partial name="_habilidades" />[m
+[32m+[m
+[32m+[m[32m<partial name="_proyectos" model= "Model.Proyectos"/>[m
+[1mdiff --git a/Views/Home/Privacy.cshtml b/Views/Home/Privacy.cshtml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..af4fb19[m
+[1m--- 
